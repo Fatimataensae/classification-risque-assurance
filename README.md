@@ -13,4 +13,4 @@ en assurance, avec comparaison de plusieurs modèles.
 Python, Scikit-learn, Pandas, NumPy
 
 ## 📊 Résultats
-[Ajoute ici tes métriques ou une capture d'écran]
+
