@@ -1,71 +1,98 @@
-# Classification du risque des assurés
+ 🏥 Prédiction du niveau de risque des assurés
 
 ## Présentation du projet
 
-Ce projet de Machine Learning, réalisé en groupe dans le cadre de la formation à l'Université de Versailles Saint-Quentin, porte sur la prédiction du niveau de risque des assurés à partir de caractéristiques démographiques, socio-économiques, comportementales et médicales.
+Ce projet de Machine Learning, réalisé en groupe dans le cadre de notre formation à l'Université de Versailles Saint-Quentin (UVSQ), vise à prédire si un assuré présente un niveau de risque médical élevé à partir de caractéristiques démographiques, socio-économiques et liées à son mode de vie et à sa santé.
 
-L'objectif est de construire et d'évaluer des modèles de classification capables de distinguer les assurés selon leur niveau de risque (`is_high_risk`).
+L'objectif est de comparer plusieurs algorithmes de classification supervisée afin d'identifier ceux qui permettent de prédire le niveau de risque des assurés.
 
 ## Objectifs
 
-- Explorer et analyser les données afin d'identifier les principales caractéristiques des assurés.
+- Explorer et analyser les données afin de mieux comprendre les caractéristiques des assurés.
 - Préparer les données pour leur utilisation dans des modèles de Machine Learning.
-- Étudier la structure des données à l'aide de méthodes de réduction de dimension.
+- Explorer la structure des données à l'aide de méthodes de réduction de dimension.
 - Comparer plusieurs algorithmes de classification supervisée.
-- Évaluer les performances des modèles et analyser leurs erreurs de prédiction.
+- Évaluer les performances des modèles à l'aide de différentes métriques.
 
 ## Données
 
-Le projet utilise le fichier `medical_insurance.csv`, contenant notamment les catégories de variables suivantes :
+Le jeu de données `medical_insurance.csv` provient de Kaggle.
 
-- **Démographiques et socio-économiques :** âge, sexe, région, situation professionnelle et taille du ménage.
-- **Habitudes de vie :** indice de masse corporelle (BMI), tabagisme et fréquence de consommation d'alcool.
-- **Santé :** pression artérielle, indicateurs biologiques et antécédents médicaux.
-- **Utilisation des soins :** consultations, hospitalisations et médicaments.
+- **Nombre d'observations :** 100 000
+- **Nombre de variables :** 53
+- **Variable cible :** `is_high_risk`, qui indique si un assuré appartient à la catégorie de risque élevé.
 
-La variable cible est `is_high_risk`, qui représente la classe de risque à prédire. La variable `risk_score` est exclue des variables explicatives dans la préparation initiale.
+Les variables explicatives comprennent notamment l'âge, le revenu, l'indice de masse corporelle (BMI), la pression artérielle, le tabagisme et certaines habitudes de vie.
+
+La variable `risk_score`, utilisée dans la construction de la variable cible selon la source, a été supprimée des variables explicatives.
+
+**Source :** [Medical Insurance Cost Prediction — Kaggle](https://www.kaggle.com/datasets/mohankrishnathalla/medical-insurance-cost-prediction/data)
 
 ## Méthodologie
 
-### 1. Analyse exploratoire
+### 1. Analyse exploratoire des données
 
-- Étude des distributions des variables numériques et catégorielles.
-- Analyse des relations entre les variables explicatives et la variable cible.
-- Étude des corrélations entre variables numériques.
+- Étude des variables quantitatives et qualitatives.
+- Analyse de la distribution de la variable cible.
+- Étude des corrélations entre les variables.
+- Visualisation de la structure des données à l'aide de t-SNE.
 
 ### 2. Prétraitement des données
 
-- Gestion des valeurs manquantes.
-- Encodage ordinal des variables catégorielles ordonnées.
-- Encodage One-Hot des variables catégorielles nominales.
-- Standardisation des variables avant l'Analyse en Composantes Principales (ACP).
+- Encodage des variables catégorielles nominales avec One-Hot Encoding.
+- Encodage des variables catégorielles ordinales avec Ordinal Encoding.
+- Imputation des valeurs manquantes, notamment pour la variable `alcohol_freq`.
+- Suppression des variables jugées inutiles pour la modélisation, dont `id` et `risk_score`.
+
+Les étapes de prétraitement ont été organisées pour éviter les fuites de données entre les ensembles d'entraînement et de test.
 
 ### 3. Réduction de dimension
 
-Deux méthodes sont explorées :
-
-- **ACP (Analyse en Composantes Principales)** : réduction de dimension en conservant des axes représentant une partie de la variabilité des données.
-- **t-SNE** : représentation en deux dimensions pour explorer la structure des données et le chevauchement éventuel entre les classes.
+- **Analyse en composantes principales (ACP)** pour étudier une représentation réduite des variables.
+- **t-SNE** pour visualiser les données en deux dimensions et explorer leur structure.
 
 ### 4. Modélisation
 
-Trois algorithmes de classification sont étudiés :
+Trois algorithmes de classification supervisée ont été étudiés :
 
-- Régression logistique.
-- Support Vector Machine (SVM).
-- Forêt aléatoire (*Random Forest*).
-
-Les expérimentations utilisent des représentations réduites des données, notamment issues de l'ACP et de t-SNE.
+- Régression logistique
+- Support Vector Machine (SVM)
+- Forêt aléatoire (*Random Forest*)
 
 ### 5. Évaluation
 
-Les modèles sont évalués sur un ensemble de test représentant 30 % des données, à l'aide de :
+Les performances des modèles ont été comparées à l'aide des métriques suivantes :
 
-- Matrices de confusion.
-- Rapports de classification.
-- Précision (*precision*), rappel (*recall*) et F1-score.
+- **Accuracy** : proportion de prédictions correctes.
+- **ROC-AUC** : capacité à discriminer les deux classes.
+- **F1-score** : moyenne harmonique de la précision et du rappel.
+- **Precision** : proportion de prédictions positives qui sont effectivement positives.
+- **Recall** : proportion de cas positifs correctement détectés.
 
-L'analyse de ces métriques permet d'étudier les performances globales et les erreurs propres à chaque classe.
+## Résultats
+
+Les résultats reportés dans la présentation du projet sont les suivants :
+
+| Modèle | Accuracy | ROC-AUC | F1-score | Precision | Recall |
+|---|---:|---:|---:|---:|---:|
+| Régression logistique | 0.8676 | 0.9468 | 0.8281 | 0.7924 | 0.8672 |
+| Random Forest | **0.9935** | **0.9999** | **0.9911** | **0.9939** | **0.9884** |
+| SVM | 0.8674 | 0.9468 | 0.8279 | 0.7919 | 0.8673 |
+
+D'après ces métriques, le **Random Forest obtient les meilleures performances** sur les cinq indicateurs présentés. La régression logistique et le SVM affichent des résultats très proches.
+
+Ces résultats doivent toutefois être interprétés en tenant compte du protocole expérimental, de la séparation entraînement/test et de la manière dont les transformations des données ont été appliquées.
+
+## Limites et perspectives
+
+Les principales limites identifiées au cours du projet concernent :
+
+- Le choix et la représentativité du jeu de données.
+- Le temps d'exécution de certaines méthodes.
+- Le choix du nombre de composantes retenues pour l'ACP.
+- L'exploration d'autres méthodes de réduction de dimension, notamment t-SNE et l'AFDM.
+
+Parmi les perspectives d'amélioration figurent également l'optimisation des hyperparamètres, la comparaison des modèles dans un protocole expérimental commun et l'analyse de leur capacité à généraliser à de nouvelles observations.
 
 ## Technologies utilisées
 
@@ -75,16 +102,6 @@ L'analyse de ces métriques permet d'étudier les performances globales et les e
 - Scikit-learn
 - Jupyter Notebook
 
-## Pistes d'amélioration
-
-- Comparer les modèles sur un protocole d'évaluation commun et reproductible.
-- Optimiser les hyperparamètres et comparer les résultats obtenus.
-- Étudier l'influence du déséquilibre éventuel entre les classes.
-- Examiner les variables les plus importantes pour la prédiction.
-- Évaluer la robustesse des modèles sur des données non utilisées pendant l'entraînement.
-
 ## Auteurs
 
-Projet réalisé en groupe par Fatimata Tall, Samafou Koumla et Frejuste Abinonkpa.
-
-Université de Versailles Saint-Quentin — 8 janvier 2026.
+Projet réalisé en groupe par **Fatimata Tall, Samafou Koumla et Frejuste Abinonkpa**, dans le cadre de notre formation à l'Université de Versailles Saint-Quentin (UVSQ).
