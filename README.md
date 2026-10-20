@@ -1,4 +1,4 @@
- 🏥 Prédiction du niveau de risque des assurés
+# Prédiction du niveau de risque des assurés
 
 ## Présentation du projet
 
